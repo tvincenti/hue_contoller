@@ -3,29 +3,48 @@ import requests
 import json
 import time
 import os
+import pprint
 
-os.system('clear')
 
-url = 'http://10.0.0.62/api/aQuXs1CCrJsRswx8IYuocTTQKS0P5NqK1vP1VljD/lights/4/state'
+try:
+    from conn_info import id,ip
+
+except:
+    os.system('clear')
+    ip = raw_input('Enter IP address of the hue bridge: ')
+    id = raw_input('Enter the api user account: ')
+    f = open( 'conn_info.py', 'w' )
+    f.write('ip = ' + '\'' + ip + '\'' + '\n' )
+    f.write('id = ' + '\'' + id + '\'')
+    f.close()
+
+light_num = raw_input('Enter the ID of the light you want to control: ')
+url = 'http://' + ip + '/api/' + id + '/lights/' + light_num + '/state'
+
+url_ping = 'http://' + ip + '/api' + id + '/lights/'
+
 
 #Color
-
 color_max = 65535
 color_min = 0
 interval = 360
- 
+
+def ping_lights():
+    r = requests.get(url_ping)
+    print r.status_code
+    print r.text
+    time.sleep(15)
+     
 def light_on():
     on = json.dumps({"on":True})
     r = requests.put(url,data=on)
-    #print 'Light Response: ' + r.content
 
 def light_off():
-    off = json.dumps({"on":False})
+    off = json.dumps({"on":False,"sat":254})
     r = requests.put(url,data=off)
-    #print 'Light Response: ' + r.content
 
 def flash():
-    for flash in range(0,10):
+    for flash in range(0,3):
         light_on()
         time.sleep(.75)
         #print str(flash) + ' Light Response: '
@@ -35,14 +54,14 @@ def flash():
 
 def color_range():
     light_on()    
-    for x in range(color_min, color_max, interval):
-        hue = json.dumps({"hue":x})
-        payload = hue
-        r = requests.put(url, data=payload)
-        #print x
-        #print '---------'
-        #print r  
-        #print r.content
+    for i in range(0,5):
+        for x in range(color_min, color_max, interval):
+            hue = json.dumps({"hue":x})
+            payload = hue
+            r = requests.put(url, data=payload)
+
+#def try_connect():
+    
 
 def prog_panic():
     for p in range(0,8):
@@ -76,10 +95,8 @@ def color_green():
     r = requests.put(url,data=color)
 
 def color_blue():
-    color = json.dumps({"hue":46920,"sat":254})
+    color = json.dumps({"hue":46920})
     r = requests.put(url,data=color)
-    #print r
-    #print r.content
 
 def color_orange():
     color = json.dumps({"hue":10800})
@@ -94,10 +111,8 @@ def color_yellow():
     r = requests.put(url,data=color)
 
 def color_red():
-    color = json.dumps({"hue":65280,"sat":254})
+    color = json.dumps({"hue":65280})
     r = requests.put(url,data=color)
-    #print r
-    #print r.content
 
 def dim():
     print 'Select a dim setting: - low, - medium, - high, - full'
@@ -135,13 +150,14 @@ def dim_percent():
         time.sleep(2)
         dim_percent()       
  
-def menu():
+def main():
     print
     print 'TVz Hue Controller - v1.0 '
     print '-----------------------------------------'
     print 
     print '    Select Hue Command:'
-    print
+    print 
+    print '        - ping lights'
     print '        - on'
     print '        - off'
     print '        - dim'
@@ -220,6 +236,9 @@ def menu():
     elif option == 'color range':
         color_range()
 
+    elif option == 'ping lights':
+        ping_lights()
+
     elif option == 'exit':
         exit()
 
@@ -230,6 +249,7 @@ def menu():
         time.sleep(2)
 
     os.system('clear')
-    return menu()
+    return main()
 
-menu()
+if __name__ == "__main__":
+    main()

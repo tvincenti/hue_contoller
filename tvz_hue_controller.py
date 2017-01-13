@@ -15,7 +15,7 @@ except:
     id = raw_input('Enter the api user account: ')
     f = open( 'conn_info.py', 'w' )
     f.write('ip = ' + '\'' + ip + '\'' + '\n' )
-    f.write('id = ' + '\'' + id + '\'')
+    f.write('id = ' + '\'' + id + '\'' + '\n')
     f.close()
 
 light_num = raw_input('Enter the ID of the light you want to control: ')
@@ -54,11 +54,18 @@ def flash():
 
 def color_range():
     light_on()    
-    for i in range(0,5):
+    for i in range(0,1):
         for x in range(color_min, color_max, interval):
             hue = json.dumps({"hue":x})
             payload = hue
             r = requests.put(url, data=payload)
+            #print x
+
+def manual():
+    hcc = raw_input("Enter Hue Color Code(0-65535): ") 
+    hue = json.dumps({"hue":int(hcc)})
+    payload = hue
+    r = requests.put(url,data=payload)
 
 #def try_connect():
     
@@ -170,6 +177,7 @@ def main():
     print '        - yellow'
     print '        - pink'
     print '        - green'
+    print '        - manual'
     print
     print '        - flash'
     print '        - five o'
@@ -238,6 +246,9 @@ def main():
 
     elif option == 'ping lights':
         ping_lights()
+
+    elif option == 'manual':
+        manual()
 
     elif option == 'exit':
         exit()

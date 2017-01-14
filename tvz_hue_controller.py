@@ -86,7 +86,7 @@ def prog_america():
     color_blue()
 
 def prog_five_o():
-    for pig in range(0,10):
+    for p in range(0,10):
         light_on()
         color_red()
         time.sleep(.33)

@@ -117,6 +117,10 @@ def color_yellow():
     color = json.dumps({"hue":12750})
     r = requests.put(url,data=color)
 
+def color_purple():
+    color = json.dumps({"hue":49680})
+    r = requests.put(url,data=color)
+
 def color_red():
     color = json.dumps({"hue":65280})
     r = requests.put(url,data=color)
@@ -176,6 +180,7 @@ def main():
     print '        - blue'
     print '        - yellow'
     print '        - pink'
+    print '        - purple'
     print '        - green'
     print '        - manual'
     print
@@ -215,6 +220,10 @@ def main():
     elif option == 'pink':
         light_on()
         color_pink()
+    
+    elif option == 'purple':
+        light_on()
+        color_purple()
 
     elif option == 'yellow':
         light_on()

@@ -4,7 +4,7 @@ import json
 import time
 import os
 import pprint
-
+from random import randint
 
 try:
     from conn_info import id,ip
@@ -61,6 +61,17 @@ def color_range():
             r = requests.put(url, data=payload)
             #print x
 
+def rand_sleep():
+    id = randint(0,3)
+    if id == 0:
+        time.sleep(.25)
+    elif id == 1:
+        time.sleep(.50)
+    elif id == 2:
+        time.sleep(.75)
+    else:
+        time.sleep(.1)
+
 def manual():
     hcc = raw_input("Enter Hue Color Code(0-65535): ") 
     hue = json.dumps({"hue":int(hcc)})
@@ -69,6 +80,30 @@ def manual():
 
 #def try_connect():
     
+
+def prog_dance():
+    id = 0
+    while True:    
+        if id == 0:
+            light_off()
+            time.sleep(1)
+            light_on()            
+        elif id == 1:
+            color_red()
+        elif id == 2:
+            color_blue()
+        elif id == 3:
+            color_purple()
+        elif id == 4:
+            color_green()
+        elif id == 5:
+            color_white()
+        elif id == 6:
+            color_orange()
+        else:
+            color_white()
+        id = randint(0,6)
+        rand_sleep()
 
 def prog_panic():
     for p in range(0,8):
@@ -184,6 +219,7 @@ def main():
     print '        - green'
     print '        - manual'
     print
+    print '        - dance'
     print '        - flash'
     print '        - five o'
     print '        - america' 
@@ -255,6 +291,9 @@ def main():
 
     elif option == 'ping lights':
         ping_lights()
+
+    elif option == 'dance':
+        prog_dance()
 
     elif option == 'manual':
         manual()

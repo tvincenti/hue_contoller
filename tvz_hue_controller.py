@@ -34,9 +34,12 @@ def change_light():
 def ping_lights():
     url_ping = 'http://' + ip + '/api' + id + '/lights/'
     r = requests.get(url_ping)
-    print r.status_code
-    print r.text
-    time.sleep(15)
+    print 'Status Code: ',r.status_code
+    decoded = json.loads(r.text)
+    for row in decoded:
+        #print decoded[row]
+        print 'Name: ', decoded[row]['name'], '                Reachable: ', decoded[row]['state']['reachable']
+    time.sleep(20)
      
 def light_on():
     on = json.dumps({"on":True})
@@ -205,7 +208,7 @@ def main():
     print 'TVz Hue Controller'
     print '-----------------------------------------'
     print 'Light #: ' + light_num  
-    print 'Bridge Address: ' + url
+    print 'Bridge Address: ' + ip
     print 
     print '    Select Hue Command:'
     print 

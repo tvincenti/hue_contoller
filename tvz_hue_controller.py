@@ -18,18 +18,21 @@ except:
     f.write('id = ' + '\'' + id + '\'' + '\n')
     f.close()
 
-light_num = raw_input('Enter the ID of the light you want to control: ')
-url = 'http://' + ip + '/api/' + id + '/lights/' + light_num + '/state'
-
-url_ping = 'http://' + ip + '/api' + id + '/lights/'
-
-
 #Color
 color_max = 65535
 color_min = 0
 interval = 360
+light_num = raw_input('Enter the ID of the light you want to control: ')
+url = 'http://' + ip + '/api/' + id + '/lights/' + light_num + '/state'
+
+def change_light():    
+    global url
+    global light_num
+    light_num = raw_input('Enter the ID of the light you want to control: ')
+    url = 'http://' + ip + '/api/' + id + '/lights/' + light_num + '/state'
 
 def ping_lights():
+    url_ping = 'http://' + ip + '/api' + id + '/lights/'
     r = requests.get(url_ping)
     print r.status_code
     print r.text
@@ -195,11 +198,14 @@ def dim_percent():
         print 'That is not logical, that is not an integer!'
         time.sleep(2)
         dim_percent()       
+
  
 def main():
     print
-    print 'TVz Hue Controller - v1.0 '
+    print 'TVz Hue Controller'
     print '-----------------------------------------'
+    print 'Light #: ' + light_num  
+    print 'Bridge Address: ' + url
     print 
     print '    Select Hue Command:'
     print 
@@ -208,6 +214,7 @@ def main():
     print '        - off'
     print '        - dim'
     print '        - dim percent'
+    print '        - change light'
     print
     print '        - orange'
     print '        - white'
@@ -300,6 +307,9 @@ def main():
 
     elif option == 'exit':
         exit()
+
+    elif option == 'change light':
+        change_light()
 
     elif option == 'dim':
         dim()
